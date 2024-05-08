@@ -38,7 +38,7 @@ function Container() {
               relative border-l-[6px] border-transparent cursor-pointer hover:bg-[#5866DD]/5 
               hover:border-[#5866DD] ${
                 item.id === expandedItemId
-                  ? "bg-[#5866DD]/5 border-[#5866DD]"
+                  ? "bg-[#5866DD]/5 border-[#5866DD] border-l-[6px]"
                   : ""
               }`}
               onClick={() => toggleSubItems(item.id)}
@@ -55,11 +55,11 @@ function Container() {
                 />
 
                 <p
-                  className={`font-[350] text-[0.80rem] text-[#6B788E] 
+                  className={`font-[350] text-[0.80rem]  
                 group-hover:text-[#5866DD] group-hover:font-medium ${
-                  item.subItems && item.id === expandedItemId
+                  item.id === expandedItemId
                     ? "text-[#5866DD] font-medium"
-                    : ""
+                    : "text-[#6B788E]"
                 }`}
                 >
                   {item.name}
