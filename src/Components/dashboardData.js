@@ -1,102 +1,113 @@
-import dashboard from "../assets/dashboard.svg";
-import myOrders from "../assets/myOrders.svg";
-import myServices from "../assets/myServices.svg";
-import hotlineServices from "../assets/hotlineServices.svg";
-import billing from "../assets/billing.svg";
-import settings from "../assets/settings.svg";
-import help from "../assets/help.svg";
-import logout from "../assets/logout.svg";
-import myServicesActive from "../assets/myServicesActive.svg";
-import hotlineServicesActive from "../assets/hotlineServicesActive.svg";
+import logo from "../assets/logo.svg";
+import dashboardData from "./dashboardData";
+import arrowIcon from "../assets/arrowIcon.svg";
+import { useState, useEffect, useRef } from "react";
 
-const dashboardData = [
-  {
-    id: 1,
-    name: "Dashboard",
-    iconSrc: dashboard,
-    showArrowIcon: false,
-  },
-  {
-    id: 2,
-    name: "My Orders",
-    iconSrc: myOrders,
-    showArrowIcon: false,
-  },
-  {
-    id: 3,
-    name: "My Services",
-    iconSrc: myServices,
-    showArrowIcon: true,
-    activeIconSrc: myServicesActive,
+function Container() {
+  const [expandedItemId, setExpandedItemId] = useState(null);
+  const menuRef = useRef(null);
 
-    subItems: [
-      {
-        id: 31,
-        name: "All Services",
-      },
-      {
-        id: 32,
-        name: "Privacy Services",
-      },
-      {
-        id: 33,
-        name: "Regulascope",
-      },
-      {
-        id: 34,
-        name: "Decisions",
-      },
-      {
-        id: 35,
-        name: "Training",
-      },
-      {
-        id: 36,
-        name: "Document Warehouse",
-      },
-      {
-        id: 37,
-        name: "Tickets Services",
-      },
-    ],
-  },
-  {
-    id: 4,
-    name: "Hotline Services",
-    iconSrc: hotlineServices,
-    showArrowIcon: true,
-    activeIconSrc: hotlineServicesActive,
-    subItems: [
-      {
-        id: 41,
-        name: "Privacy Services",
-      },
-    ],
-  },
-  {
-    id: 5,
-    name: "Billing and Invoicing",
-    iconSrc: billing,
-    showArrowIcon: false,
-  },
-  {
-    id: 6,
-    name: "General Settings",
-    iconSrc: settings,
-    showArrowIcon: false,
-  },
-  {
-    id: 7,
-    name: "Support/Help Desk",
-    iconSrc: help,
-    showArrowIcon: false,
-  },
-  {
-    id: 8,
-    name: "Logout",
-    iconSrc: logout,
-    showArrowIcon: false,
-  },
-];
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setExpandedItemId(null);
+      }
+    };
 
-export default dashboardData;
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const toggleSubItems = (itemId) => {
+    setExpandedItemId(itemId === expandedItemId ? null : itemId);
+  };
+
+  return (
+    <div className="grid grid-cols-6 bg-[#41576B]/35 h-screen">
+      <div className="lg:col-span-1 col-span-3 bg-white flex flex-col items-center">
+        <img src={logo} className="cursor-pointer w-40 mt-24" />
+
+        <div className="mt-16 w-full">
+          {dashboardData.map((item) => (
+            <div
+              key={item.id}
+              className={`flex flex-row items-center justify-between group h-12 pl-5 pr-5 lg:pl-14 lg:pr-9 
+              relative border-l-[6px] border-transparent cursor-pointer hover:bg-[#5866DD]/5 
+              hover:border-[#5866DD] ${
+                item.id === expandedItemId
+                  ? "bg-[#5866DD]/5 border-[#5866DD]"
+                  : ""
+              }`}
+              onClick={() => toggleSubItems(item.id)}
+            >
+              <div className="flex flex-row gap-2">
+                <img
+                  className="w-4"
+                  src={
+                    item.subItems && item.id === expandedItemId
+                      ? item.activeIconSrc
+                      : item.iconSrc
+                  }
+                  alt={item.name}
+                />
+
+                <p
+                  className={`font-[350] text-[0.80rem] text-[#6B788E] 
+                group-hover:text-[#5866DD] group-hover:font-medium ${
+                  item.subItems && item.id === expandedItemId
+                    ? "text-[#5866DD] font-medium"
+                    : ""
+                }`}
+                >
+                  {item.name}
+                </p>
+              </div>
+              {item.showArrowIcon && (
+                <img className="w-2" src={arrowIcon} alt="Arrow Icon" />
+              )}
+
+              {item.subItems && item.id === expandedItemId && (
+                <div
+                  ref={menuRef}
+                  className="bg-white lg:p-5 p-3 lg:w-64 w-11/12 rounded-r-xl shadow-xl flex flex-col 
+                gap-2 absolute top-0 left-full"
+                >
+                  <div
+                    className="flex flex-row gap-5 justify-between items-center
+                 bg-[#EEEEEE]/30 h-7 rounded-lg border lg:pl-3 lg:pr-3 pl-1 pr-2"
+                  >
+                    <div className="flex flex-row items-center lg:gap-2 gap-1">
+                      <img className="w-4" src={item.iconSrc} alt={item.name} />
+
+                      <p className="font-medium lg:text-xs text-[11px] text-[#6B788E]">
+                        {item.name}
+                      </p>
+                    </div>
+
+                    <img className="w-2" src={arrowIcon} alt="Arrow Icon" />
+                  </div>
+
+                  <ul className="flex flex-col gap-2 mt-2 pl-9 cursor-pointer">
+                    {item.subItems.map((subItem) => (
+                      <li
+                        className="text-xs text-[#6B788E] font-[350] hover:text-[#5866DD] hover:font-medium mb-1"
+                        key={subItem.id}
+                      >
+                        {subItem.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Container;
