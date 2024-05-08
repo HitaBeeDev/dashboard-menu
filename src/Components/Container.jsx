@@ -35,12 +35,12 @@ function Container() {
             <div
               key={item.id}
               className={`flex flex-row items-center justify-between group h-12 pl-5 pr-5 lg:pl-14 lg:pr-9 
-              relative border-l-[6px] border-transparent cursor-pointer hover:bg-[#5866DD]/5 
-              hover:border-[#5866DD] ${
-                item.id === expandedItemId
-                  ? "bg-[#5866DD]/5 border-[#5866DD] border-l-[6px]"
-                  : ""
-              }`}
+              relative border-l-[6px] cursor-pointer hover:bg-[#5866DD]/5 
+               ${
+                 item.id === expandedItemId
+                   ? "bg-[#5866DD]/5 border-[#5866DD] border-l-[6px]"
+                   : "border-transparent"
+               }`}
               onClick={() => toggleSubItems(item.id)}
             >
               <div className="flex flex-row gap-2">
