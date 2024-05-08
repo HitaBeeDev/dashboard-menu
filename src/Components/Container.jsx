@@ -1,10 +1,25 @@
 import logo from "../assets/logo.svg";
 import dashboardData from "./dashboardData";
 import arrowIcon from "../assets/arrowIcon.svg";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function Container() {
   const [expandedItemId, setExpandedItemId] = useState(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setExpandedItemId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const toggleSubItems = (itemId) => {
     setExpandedItemId(itemId === expandedItemId ? null : itemId);
@@ -19,14 +34,34 @@ function Container() {
           {dashboardData.map((item) => (
             <div
               key={item.id}
-              className="flex flex-row items-center justify-between group h-12 pl-5 pr-5 lg:pl-14 lg:pr-9 
-            relative hover:border-l-[6px] hover:border-[#5866DD]
-             hover:bg-[#5866DD]/5 border-l-[6px] border-transparent  cursor-pointer"
+              className={`flex flex-row items-center justify-between group h-12 pl-5 pr-5 lg:pl-14 lg:pr-9 
+              relative border-l-[6px] border-transparent cursor-pointer hover:bg-[#5866DD]/5 
+              hover:border-[#5866DD] ${
+                item.id === expandedItemId
+                  ? "bg-[#5866DD]/5 border-[#5866DD]"
+                  : ""
+              }`}
               onClick={() => toggleSubItems(item.id)}
             >
               <div className="flex flex-row gap-2">
-                <img className="w-4" src={item.iconSrc} alt={item.name} />
-                <p className="font-[350] text-[0.80rem] text-[#6B788E] group-hover:text-[#5866DD] group-hover:font-medium">
+                <img
+                  className="w-4"
+                  src={
+                    item.subItems && item.id === expandedItemId
+                      ? item.activeIconSrc
+                      : item.iconSrc
+                  }
+                  alt={item.name}
+                />
+
+                <p
+                  className={`font-[350] text-[0.80rem] text-[#6B788E] 
+                group-hover:text-[#5866DD] group-hover:font-medium ${
+                  item.subItems && item.id === expandedItemId
+                    ? "text-[#5866DD] font-medium"
+                    : ""
+                }`}
+                >
                   {item.name}
                 </p>
               </div>
@@ -36,6 +71,7 @@ function Container() {
 
               {item.subItems && item.id === expandedItemId && (
                 <div
+                  ref={menuRef}
                   className="bg-white lg:p-5 p-3 lg:w-64 w-11/12 rounded-r-xl shadow-xl flex flex-col 
                 gap-2 absolute top-0 left-full"
                 >
