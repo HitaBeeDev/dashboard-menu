@@ -6,6 +6,8 @@ import billing from "../assets/billing.svg";
 import settings from "../assets/settings.svg";
 import help from "../assets/help.svg";
 import logout from "../assets/logout.svg";
+import myServicesActive from "../assets/myServicesActive.svg";
+import hotlineServicesActive from "../assets/hotlineServicesActive.svg";
 
 const dashboardData = [
   {
@@ -25,6 +27,7 @@ const dashboardData = [
     name: "My Services",
     iconSrc: myServices,
     showArrowIcon: true,
+    activeIconSrc: myServicesActive,
 
     subItems: [
       {
@@ -62,6 +65,7 @@ const dashboardData = [
     name: "Hotline Services",
     iconSrc: hotlineServices,
     showArrowIcon: true,
+    activeIconSrc: hotlineServicesActive,
     subItems: [
       {
         id: 41,
